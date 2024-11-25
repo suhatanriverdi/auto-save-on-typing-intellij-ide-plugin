@@ -5,7 +5,7 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Auto Save On Typing</name>
+    <name>AutoSave on Typing</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="tanriverdisuha@gmail.com" url="https://github.com/suhatanriverdi/">Süha Tanrıverdi</vendor>

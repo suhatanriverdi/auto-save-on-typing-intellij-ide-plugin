@@ -25,7 +25,7 @@ Ideal for developers looking for an instant saving experience like **VSCode's Au
 
 1. Open IntelliJ IDEA or any JetBrains IDE.
 2. Navigate to **File** → **Settings** → **Plugins** → **Marketplace**.
-3. Search for `Auto Save On Typing`.
+3. Search for `AutoSave on Typing`.
 4. Click **Install** and restart your IDE.
 
 ---
