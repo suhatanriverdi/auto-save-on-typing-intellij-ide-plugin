@@ -6,7 +6,6 @@ import com.intellij.ui.components.JBSlider
 import javax.swing.JLabel
 import javax.swing.BoxLayout
 import com.intellij.openapi.application.ApplicationManager
-import javax.swing.LayoutStyle
 
 class AutoSaveConfig : Configurable {
 
