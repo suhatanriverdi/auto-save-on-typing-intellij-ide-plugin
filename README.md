@@ -1,9 +1,6 @@
 # IntelliJ AutoSave Plugin
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)  
-![Version](https://img.shields.io/badge/version-1.0.0-blue)  
-![License](https://img.shields.io/badge/license-Apache%202.0-orange)  
-![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/d/12345)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![Version](https://img.shields.io/badge/version-1.0.0-blue) ![License](https://img.shields.io/badge/license-Apache%202.0-orange) ![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/d/12345)
 
 Automatically save your files as you type. <br>
 Ideal for developers looking for an instant saving experience like **VSCode's Auto Save After Delay** feature **for any IntelliJ IDE**.
