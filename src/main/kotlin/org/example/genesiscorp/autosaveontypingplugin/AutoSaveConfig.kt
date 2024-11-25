@@ -8,11 +8,19 @@ import javax.swing.BoxLayout
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.ui.JBColor
 import java.awt.Graphics
+import java.awt.Dimension
 
 class AutoSaveConfig : Configurable {
 
-    // Slider from 0 to 60 with initial value set from settings
-    private val delaySlider = JBSlider(0, 60, getDelay())
+    // Slider from 0 to 10, with increments of 1 second (1000ms)
+    private val delaySlider = JBSlider(0, 10, getDelay()).apply {
+        // Set slider to move in steps of 1 second
+        paintTicks = true
+        paintLabels = true
+        majorTickSpacing = 1  // Every 1 second for major tick
+        minorTickSpacing = 1  // No minor ticks (since it's 1 second step)
+        snapToTicks = true     // Ensure the slider snaps to ticks
+    }
     private val delayLabel = JLabel("Delay (in seconds): ${delaySlider.value}")
 
     override fun getDisplayName(): String {
@@ -31,8 +39,8 @@ class AutoSaveConfig : Configurable {
         panel.add(delayLabel)
         panel.add(delaySlider)
 
-        // Add the custom panel to draw the line under the slider
-        panel.add(createLinePanel())
+        // Add the custom panel to draw the scale (ruler) under the slider
+        panel.add(createRulerPanel())
 
         return panel
     }
@@ -63,22 +71,32 @@ class AutoSaveConfig : Configurable {
         settings.setDelaySetting(delay)
     }
 
-
-    // Create a custom panel to draw a line
-    private fun createLinePanel(): JPanel {
+    // Create a custom panel to draw a ruler (scale) under the slider
+    private fun createRulerPanel(): JPanel {
         return object : JPanel() {
             override fun paintComponent(g: Graphics) {
                 super.paintComponent(g)
-                // Set the color for the line
+
+                // Set the color for the scale markings
                 g.color = JBColor.GRAY
-                // Draw a dashed line (or solid if you prefer)
-                val dash = floatArrayOf(5.0f) // Dash pattern
-                val g2d = g.create() as java.awt.Graphics2D
-                g2d.stroke = java.awt.BasicStroke(2.0f, java.awt.BasicStroke.CAP_BUTT, java.awt.BasicStroke.JOIN_BEVEL, 0f, dash, 0f)
-                g2d.drawLine(0, 0, width, 0) // Draw horizontal line
+                val totalWidth = width
+                val step = totalWidth / 10  // 10 steps from 0 to 10 seconds
+
+                // Draw the scale and labels
+                for (i in 0..10) {
+                    // Calculate the x position for each tick mark
+                    val xPos = i * step
+
+                    // Draw the tick mark (a small vertical line)
+                    g.drawLine(xPos, 0, xPos, 5)
+
+                    // Draw the label under each tick mark
+                    val label = (i).toString()
+                    g.drawString(label, xPos - 5, 20) // Adjust the label to center it under the tick mark
+                }
             }
         }.apply {
-            preferredSize = java.awt.Dimension(0, 1) // Set the height to 1 for a thin line
+            preferredSize = Dimension(0, 30) // Set height to accommodate the scale and labels
         }
     }
 }
