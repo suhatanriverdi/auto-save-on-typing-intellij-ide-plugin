@@ -6,9 +6,7 @@ import com.intellij.ui.components.JBSlider
 import javax.swing.JLabel
 import javax.swing.BoxLayout
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.ui.JBColor
-import java.awt.Graphics
-import java.awt.Dimension
+import javax.swing.LayoutStyle
 
 class AutoSaveConfig : Configurable {
 
@@ -21,6 +19,7 @@ class AutoSaveConfig : Configurable {
         minorTickSpacing = 1  // No minor ticks (since it's 1 second step)
         snapToTicks = true     // Ensure the slider snaps to ticks
     }
+
     private val delayLabel = JLabel("Delay (in seconds): ${delaySlider.value}")
 
     override fun getDisplayName(): String {
@@ -29,7 +28,7 @@ class AutoSaveConfig : Configurable {
 
     override fun createComponent(): JPanel {
         val panel = JPanel()
-        panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
+        panel.layout = BoxLayout(panel, BoxLayout.PAGE_AXIS)
 
         // Slider and label for delay
         delaySlider.addChangeListener {
@@ -38,9 +37,6 @@ class AutoSaveConfig : Configurable {
 
         panel.add(delayLabel)
         panel.add(delaySlider)
-
-        // Add the custom panel to draw the scale (ruler) under the slider
-        panel.add(createRulerPanel())
 
         return panel
     }
@@ -69,34 +65,5 @@ class AutoSaveConfig : Configurable {
         val app = ApplicationManager.getApplication()
         val settings = app.getService(AutoSaveSettings::class.java)
         settings.setDelaySetting(delay)
-    }
-
-    // Create a custom panel to draw a ruler (scale) under the slider
-    private fun createRulerPanel(): JPanel {
-        return object : JPanel() {
-            override fun paintComponent(g: Graphics) {
-                super.paintComponent(g)
-
-                // Set the color for the scale markings
-                g.color = JBColor.GRAY
-                val totalWidth = width
-                val step = totalWidth / 10  // 10 steps from 0 to 10 seconds
-
-                // Draw the scale and labels
-                for (i in 0..10) {
-                    // Calculate the x position for each tick mark
-                    val xPos = i * step
-
-                    // Draw the tick mark (a small vertical line)
-                    g.drawLine(xPos, 0, xPos, 5)
-
-                    // Draw the label under each tick mark
-                    val label = (i).toString()
-                    g.drawString(label, xPos - 5, 20) // Adjust the label to center it under the tick mark
-                }
-            }
-        }.apply {
-            preferredSize = Dimension(0, 30) // Set height to accommodate the scale and labels
-        }
     }
 }

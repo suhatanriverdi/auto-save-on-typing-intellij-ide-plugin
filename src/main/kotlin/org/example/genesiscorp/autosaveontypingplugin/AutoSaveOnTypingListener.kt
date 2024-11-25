@@ -24,7 +24,7 @@ class AutoSaveOnTypingListener : EditorFactoryListener {
 
                 // Get the delay from settings
                 // Convert to milliseconds
-                val delayInSeconds = AutoSaveConfig().getDelay()
+                val delay = AutoSaveConfig().getDelay()
 
                 // Schedule the auto-save
                 saveTimer = Timer()
@@ -35,7 +35,7 @@ class AutoSaveOnTypingListener : EditorFactoryListener {
                             autoSaveDocument(document)
                         }
                     }
-                }, delayInSeconds * 1000L)
+                }, delay * 1000L)
             }
         })
     }

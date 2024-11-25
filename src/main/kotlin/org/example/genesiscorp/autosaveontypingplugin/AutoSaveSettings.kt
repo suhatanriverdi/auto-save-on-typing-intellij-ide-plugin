@@ -7,7 +7,6 @@ import com.intellij.openapi.components.Storage
 @State(name = "AutoSaveOnTypingSettings", storages = [Storage("AutoSaveOnTypingSettings.xml")])
 @Service
 class AutoSaveSettings {
-
     private var delay: Int = 0 // Default delay of 0 seconds.
 
     fun getDelaySetting(): Int {
