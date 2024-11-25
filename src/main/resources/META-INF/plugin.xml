@@ -1,5 +1,5 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
-<idea-plugin>
+<idea-plugin require-restart="true">
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
     <id>org.example.genesiscorp.auto-save-on-typing-plugin</id>
 
@@ -14,9 +14,14 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    This plugin automatically saves files every time you type,<br>
-    helping developers who prefer instant code reflection without manual saving.
-  ]]></description>
+Automatically saves your current file as you type<br>
+<ul>
+  <li>Supports all file types (Java, Kotlin, Rust, Go, C#, PHP, HTML, CSS, SQL, JavaScript, TypeScript, JSX, TSX etc.)</li>
+  <li>Instant real-time file saves</li>
+  <li>No need to manually press "Ctrl + S" or "Command + S" anymore</li>
+  <li>Ideal for front-end developers, see UI updates instantly</li>
+</ul>
+]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -25,8 +30,8 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <editorFactoryListener implementation="org.example.genesiscorp.autosaveontypingplugin.AutoSaveOnTypingListener"/>
-        <applicationConfigurable displayName="Auto Save On Typing" instance="org.example.genesiscorp.autosaveontypingplugin.AutoSaveConfig" />
+        <editorFactoryListener
+                implementation="org.example.genesiscorp.autosaveontypingplugin.AutoSaveOnTypingListener"/>
     </extensions>
 
 </idea-plugin>
