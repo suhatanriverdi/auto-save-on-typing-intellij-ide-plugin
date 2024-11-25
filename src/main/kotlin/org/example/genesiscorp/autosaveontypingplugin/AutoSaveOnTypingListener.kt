@@ -1,6 +1,5 @@
 package org.example.genesiscorp.autosaveontypingplugin
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
@@ -29,7 +28,7 @@ class AutoSaveOnTypingListener : EditorFactoryListener {
 
                 val job = scope.launch {
                     if (delay > 0) {
-                        delay(delay.toLong()) // Wait for the delay period
+                        delay(delay) // Wait for the delay period
                     }
                     saveDocument(document)
                 }
