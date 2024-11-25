@@ -8,44 +8,44 @@ import com.intellij.openapi.editor.event.EditorFactoryEvent
 import com.intellij.openapi.editor.event.EditorFactoryListener
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.vfs.VirtualFile
-import java.util.Timer
-import java.util.TimerTask
+import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentHashMap
 
 class AutoSaveOnTypingListener : EditorFactoryListener {
 
-    private var saveTimer: Timer? = null
+    // CoroutineScope for managing auto-save tasks
+    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val documentJobs = ConcurrentHashMap<Document, Job>() // Track jobs for each document
 
     override fun editorCreated(event: EditorFactoryEvent) {
         val document = event.editor.document
         document.addDocumentListener(object : DocumentListener {
             override fun documentChanged(event: DocumentEvent) {
-                // Cancel the previous save task if it's still running
-                saveTimer?.cancel()
+                // Cancel any existing job for this document
+                documentJobs[document]?.cancel()
 
-                // Get the delay from settings
-                // Convert to milliseconds
-                val delay = AutoSaveConfig().getDelay()
+                // Start a new coroutine for saving this document
+                val delay = AutoSaveConfig().getDelay() * 1000L
 
-                // Schedule the auto-save
-                saveTimer = Timer()
-                saveTimer?.schedule(object : TimerTask() {
-                    override fun run() {
-                        // Schedule the task to run on the EDT
-                        ApplicationManager.getApplication().invokeLater {
-                            autoSaveDocument(document)
-                        }
+                val job = scope.launch {
+                    if (delay > 0) {
+                        delay(delay.toLong()) // Wait for the delay period
                     }
-                }, delay * 1000L)
+                    saveDocument(document)
+                }
+                documentJobs[document] = job
             }
         })
     }
 
-    private fun autoSaveDocument(document: Document) {
+    private suspend fun saveDocument(document: Document) {
         try {
             val virtualFile: VirtualFile? = FileDocumentManager.getInstance().getFile(document)
             if (virtualFile != null && virtualFile.isValid) {
-                FileDocumentManager.getInstance().saveDocument(document)
-                println("File auto-saved: ${virtualFile.path}")
+                // Switch to EDT to interact with IntelliJ APIs
+                withContext(Dispatchers.Main) {
+                    FileDocumentManager.getInstance().saveDocument(document)
+                }
             }
         } catch (e: Exception) {
             println("Error during auto-save: ${e.message}")
